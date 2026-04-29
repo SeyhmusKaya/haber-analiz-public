@@ -1,0 +1,363 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --color-bg: #0a0a0a;
+  --color-surface: #111111;
+  --color-surface-2: #1a1a1a;
+  --color-surface-3: #222222;
+  --color-border: #2a2a2a;
+  --color-border-subtle: #1f1f1f;
+
+  --color-text: #f0f0f0;
+  --color-text-2: #a0a0a0;
+  --color-text-3: #666666;
+
+  --color-accent: #3b82f6;
+  --color-accent-dim: rgba(59, 130, 246, 0.15);
+
+  --color-pro: #ef4444;
+  --color-pro-dim: rgba(239, 68, 68, 0.1);
+  --color-opp: #22c55e;
+  --color-opp-dim: rgba(34, 197, 94, 0.1);
+  --color-cons: #f59e0b;
+  --color-cons-dim: rgba(245, 158, 11, 0.1);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  --color-overlay: rgba(10, 10, 10, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+  --color-overlay: rgba(250, 250, 250, 0.7);
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f4f5;
+  --color-surface-3: #e4e4e7;
+  --color-border: #e4e4e7;
+  --color-border-subtle: #f0f0f0;
+  --color-text: #09090b;
+  --color-text-2: #52525b;
+  --color-text-3: #a1a1aa;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-3); }
+
+/* Utilities */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-up { animation: fadeUp 0.35s ease forwards; }
+.animate-shimmer {
+  background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-surface-2) 50%, var(--color-surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Sidebar hide on mobile */
+@media (max-width: 768px) {
+  .sidebar-hide-mobile { display: none !important; }
+}
+
+/* ===== MOBILE CARD: yatay layout (mobilde resim sol, metin sağ) ===== */
+@media (max-width: 640px) {
+  .news-card-mobile {
+    flex-direction: row !important;
+  }
+  .news-card-img {
+    width: 110px !important;
+    height: 110px !important;
+    flex-shrink: 0 !important;
+    border-radius: 0 !important;
+  }
+  .news-card-img .video-play-btn {
+    width: 30px !important;
+    height: 30px !important;
+    border-width: 1.5px !important;
+  }
+  .news-card-img .video-play-btn span {
+    font-size: 11px !important;
+  }
+  .news-card-content {
+    padding: 10px 12px !important;
+  }
+  .news-card-summary {
+    display: none !important;
+  }
+  .news-card-title {
+    font-size: 13px !important;
+    -webkit-line-clamp: 3 !important;
+  }
+}
+
+/* ===== StatsBand: 2x2 grid on mobile ===== */
+@media (max-width: 600px) {
+  .stats-band {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .stats-band > *:nth-child(1),
+  .stats-band > *:nth-child(2) {
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+  .stats-band > *:nth-child(odd) {
+    border-right: 1px solid var(--color-border-subtle) !important;
+  }
+  .stats-band > * {
+    border-right: none !important;
+  }
+}
+
+/* ===== TensionSection: single column on mobile ===== */
+@media (max-width: 600px) {
+  .tension-list {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ===== Haber detay sayfası mobile ===== */
+@media (max-width: 640px) {
+  .haber-detay-container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+
+/* ===== Kategori filter mobile ===== */
+@media (max-width: 640px) {
+  .category-filter-wrap {
+    gap: 6px !important;
+  }
+  .category-filter-wrap button {
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+  }
+}
+
+/* ========== MOBILE RESPONSIVE ========== */
+
+/* Responsive font sizing */
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+}
+
+/* Mobile container padding */
+@media (max-width: 640px) {
+  .mobile-container { padding-left: 16px !important; padding-right: 16px !important; }
+}
+
+/* ===== Global mobile page padding — tüm sayfalarda tutarlı sol/sağ boşluk ===== */
+/* React JSX maxWidth → max-width olarak render edilir */
+@media (max-width: 640px) {
+  main > div[style*="max-width"] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+/* Mobile grid: force single column */
+@media (max-width: 640px) {
+  .mobile-grid-1 { grid-template-columns: 1fr !important; }
+}
+
+/* Mobile flex: stack vertically */
+@media (max-width: 640px) {
+  .mobile-stack { flex-direction: column !important; }
+  .mobile-stack > * { width: 100% !important; }
+}
+
+/* Mobile gap reduction */
+@media (max-width: 640px) {
+  .mobile-gap-sm { gap: 8px !important; }
+}
+
+/* Mobile padding reduction */
+@media (max-width: 640px) {
+  .mobile-p-sm { padding: 14px !important; }
+  .mobile-px-sm { padding-left: 14px !important; padding-right: 14px !important; }
+}
+
+/* Mobile text sizing */
+@media (max-width: 640px) {
+  .mobile-text-sm { font-size: 13px !important; }
+  .mobile-text-lg { font-size: 20px !important; }
+  .mobile-text-xl { font-size: 24px !important; }
+}
+
+/* Mobile hide */
+@media (max-width: 640px) {
+  .mobile-hide { display: none !important; }
+}
+
+/* Mobile show (hidden on desktop) */
+.mobile-show { display: none !important; }
+@media (max-width: 768px) {
+  .mobile-show { display: flex !important; }
+}
+
+/* Mobile bottom nav */
+.mobile-bottom-nav {
+  display: none !important;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: 8px 0;
+    padding-bottom: env(safe-area-inset-bottom, 8px);
+    justify-content: space-around;
+    align-items: center;
+  }
+  /* Add bottom padding to body so content isn't hidden behind nav */
+  body { padding-bottom: 70px; }
+}
+
+/* Touch target minimum */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Safe area for notch devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-area-top { padding-top: env(safe-area-inset-top); }
+  .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+/* Smooth scroll on iOS */
+.scroll-smooth { -webkit-overflow-scrolling: touch; }
+
+/* Hide scrollbar but keep scroll */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ChatWidget FAB: mobilede ActionSidebar üstüne çık */
+@media (max-width: 1024px) {
+  .chat-widget-fab { bottom: 72px !important; right: 12px !important; }
+}
+
+/* ===== Legal pages sidebar (kullanim-kosullari, gizlilik, cerez-politikasi) ===== */
+@media (max-width: 768px) {
+  .legal-grid { grid-template-columns: 1fr !important; }
+  .legal-toc { display: none !important; }
+}
+
+/* ===== İletişim page grid ===== */
+@media (max-width: 768px) {
+  .iletisim-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ===== Hakkımızda misyon/vizyon grid ===== */
+@media (max-width: 640px) {
+  .hakkimizda-mv-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ===== Profil telefon/yaş grid ===== */
+@media (max-width: 640px) {
+  .profil-phone-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ===== Admin panel mobile ===== */
+@media (max-width: 1024px) {
+  .admin-layout { overflow-x: hidden !important; }
+  .admin-layout > aside { width: 62px !important; min-width: 62px !important; flex-shrink: 0 !important; }
+}
+@media (max-width: 640px) {
+  .admin-layout { flex-direction: column !important; }
+  .admin-layout > aside { width: 100% !important; min-width: 0 !important; height: auto !important; position: relative !important; flex-direction: row !important; overflow-x: auto !important; overflow-y: hidden !important; }
+  .admin-layout > aside nav { flex-direction: row !important; padding: 4px 0 !important; }
+  .admin-layout > aside nav a { padding: 8px 12px !important; justify-content: center !important; gap: 0 !important; border-radius: 8px !important; margin: 2px 4px !important; }
+  .admin-layout > aside nav a span:last-child { display: none !important; }
+  .admin-layout > main { min-width: 0 !important; }
+}
+
+/* ===== Footer responsive ===== */
+@media (max-width: 1024px) {
+  .footer-grid { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 640px) {
+  .footer-grid { grid-template-columns: 1fr 1fr !important; padding: 32px 16px 24px !important; }
+  .footer-grid > div:first-child { grid-column: 1 / -1; }
+  .footer-bottom { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+  .footer-bottom-right { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+}
+
+/* ===== Related news image bigger on mobile ===== */
+@media (max-width: 640px) {
+  .related-news-img { height: 160px !important; }
+}
+
+/* ===== Hero slider: desktop vs mobile layout ===== */
+.hero-slider-mobile { display: none !important; }
+@media (max-width: 640px) {
+  .hero-slider-desktop { display: none !important; }
+  .hero-slider-mobile { display: block !important; }
+}
+
+/* Print styles */
+@media print {
+  header, footer, .sidebar-hide-mobile, button { display: none !important; }
+  main { padding: 0 !important; }
+}

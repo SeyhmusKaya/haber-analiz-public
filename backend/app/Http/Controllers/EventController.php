@@ -312,7 +312,7 @@ class EventController extends Controller
                 ->join('articles as a', 'a.id', '=', 'ea.article_id')
                 ->join('sources as s', 's.id', '=', 'a.source_id')
                 ->whereNotNull('e.title_tr')
-                ->where('e.created_at', '>=', now()->subDays(3))
+                ->where('e.created_at', '>=', now()->subDays(300))
                 ->where(function ($q) use ($keywordConditions, $keywordParams) {
                     // Gemini sınıflandırması varsa onu kullan, yoksa keyword fallback
                     $q->where('e.is_turkey_related', true)
@@ -363,7 +363,7 @@ class EventController extends Controller
                 ->join('articles as a', 'a.id', '=', 'ea.article_id')
                 ->join('sources as s', 's.id', '=', 'a.source_id')
                 ->whereNotNull('e.title_tr')
-                ->where('e.created_at', '>=', now()->subDays(7))
+                ->where('e.created_at', '>=', now()->subDays(300))
                 ->where(function ($q) {
                     $q->where('e.is_turkey_related', true)
                       ->orWhereNull('e.is_turkey_related');
@@ -412,7 +412,7 @@ class EventController extends Controller
                 ->join('articles as a', 'a.id', '=', 'ea.article_id')
                 ->join('sources as s', 's.id', '=', 'a.source_id')
                 ->whereNotNull('e.title_tr')
-                ->where('e.created_at', '>=', now()->subDays(3))
+                ->where('e.created_at', '>=', now()->subDays(300))
                 ->select('e.id')
                 ->groupBy('e.id')
                 ->havingRaw('COUNT(DISTINCT s.country_code) >= 2')
@@ -487,7 +487,7 @@ class EventController extends Controller
                 ->join('articles as a', 'a.id', '=', 'ea.article_id')
                 ->join('sources as s', 's.id', '=', 'a.source_id')
                 ->whereNotNull('e.title_tr')
-                ->where('e.created_at', '>=', now()->subDays(3))
+                ->where('e.created_at', '>=', now()->subDays(300))
                 ->select('e.id')
                 ->groupBy('e.id')
                 ->havingRaw('COUNT(DISTINCT s.country_code) >= 2')

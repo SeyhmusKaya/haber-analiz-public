@@ -1,7 +1,7 @@
 <?php
 namespace App\Console\Commands;
 
-use App\Services\GeminiService;
+use App\Services\LibreTranslateService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -12,10 +12,14 @@ class FetchFullText extends Command
     protected $signature   = 'haber:fulltext {--limit=50 : Tek seferde işlenecek makale sayısı}';
     protected $description = 'Pending makalelerin tam metnini çek, dil tespiti yap, Türkçe çevir';
 
-    public function handle(GeminiService $gemini): void
+    public function handle(LibreTranslateService $translator): void
     {
         $limit = (int) $this->option('limit');
         $this->info("Full-text scraping başlıyor (limit: {$limit})...");
+
+        if (!$translator->isHealthy()) {
+            $this->warn("LibreTranslate erişilemiyor; çeviri yapılmadan devam edilecek.");
+        }
 
         $articles = DB::table('articles')
             ->join('sources', 'articles.source_id', '=', 'sources.id')
@@ -43,7 +47,7 @@ class FetchFullText extends Command
                 }
 
                 // Dil tespit + Türkçe çeviri
-                $trText = $this->translateToTurkish($gemini, $text, $article->language ?? 'en');
+                $trText = $this->translateToTurkish($translator, $text, $article->language ?? 'en');
 
                 DB::table('articles')->where('id', $article->id)->update([
                     'full_text'         => mb_substr($text, 0, 10000),
@@ -104,14 +108,12 @@ class FetchFullText extends Command
         return $text;
     }
 
-    private function translateToTurkish(GeminiService $gemini, string $text, string $lang): ?string
+    private function translateToTurkish(LibreTranslateService $translator, string $text, string $lang): ?string
     {
         // Türkçe ise çevirme
         if ($lang === 'tr') return $text;
 
         $excerpt = mb_substr($text, 0, 3000);
-        $prompt = "Aşağıdaki metni Türkçeye çevir. Sadece çeviriyi yaz, başka hiçbir şey ekleme:\n\n{$excerpt}";
-
-        return $gemini->generate($prompt, 4096);
+        return $translator->translate($excerpt, $lang, 'tr');
     }
 }
